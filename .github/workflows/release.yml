@@ -52,9 +52,6 @@ jobs:
 
     - name: Push all changes back to origin.
       run: |
-        git add CHANGELOG.md version.txt pyproject.toml
-        git commit --message "ci(release): Release ${{ steps.collect-version.outputs.version }}"
-        git tag --annotate "v${{ steps.collect-version.outputs.version }}" --message="ci(tag): Release ${{ steps.collect-version.outputs.version }}"
         git remote set-url origin https://thumbnailer-release:${{ secrets.GITHUB_TOKEN }}@github.com/ebridges/elektrum-processor.git
         git push --follow-tags
 
