@@ -52,7 +52,7 @@ jobs:
 
     - name: Push all changes back to origin.
       run: |
-        git remote set-url origin https://thumbnailer-release:${{ secrets.GITHUB_TOKEN }}@github.com/ebridges/elektrum-processor.git
+        git remote set-url origin https://thumbnailer-release:${{ secrets.GITHUB_TOKEN }}@github.com/ebridges/thumbnailer.git
         git push --follow-tags
 
     - name: Create release
