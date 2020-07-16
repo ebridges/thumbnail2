@@ -46,7 +46,7 @@ jobs:
 
     - name: Uninstall unneeded dependencies
       run: |
-      pip uninstall commitizen
+        pip uninstall commitizen
 
     - name: Build lambda archive.
       id: lambda-archive
