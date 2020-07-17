@@ -10,6 +10,7 @@ from thumbnailer.responses import (
     generate_binary_response,
     generate_favicon_response,
     generate_json_respone,
+    generate_version_response,
 )
 from thumbnailer.s3 import KeyNotFound, download_file_from_s3, upload_file_to_s3
 from thumbnailer.util import configure_logging, DEFAULT_WIDTH, DEFAULT_HEIGHT
@@ -75,6 +76,9 @@ def handler(event, context):
 
     if url_path.endswith('favicon.ico'):
         return generate_favicon_response()
+
+    if url_path.endswith('version'):
+        return generate_version_response()
 
     source_bucket = environ.get(MEDIA_BUCKET_ENV_KEY)
     if not source_bucket:

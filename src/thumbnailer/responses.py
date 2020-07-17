@@ -2,6 +2,17 @@ from base64 import b64encode
 from magic import Magic
 from json import dumps
 from logging import debug, info
+from thumbnailer import version
+
+
+def generate_version_response():
+    mesg = {'version': version}
+    return {
+        'isBase64Encoded': False,
+        'statusCode': 200,
+        'headers': {'content-type': 'text/json'},
+        'body': dumps(mesg),
+    }
 
 
 def generate_json_respone(httpStatusCode, message):
