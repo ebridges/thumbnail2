@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "thumbnailer"
 version = "1.0.1"
-description = ""
+description = "A lambda function to generate thumbnails to an S3 bucket."
 authors = ["Edward Q. Bridges <github@eqbridges.com>"]
 
 [tool.poetry.dependencies]
