@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "thumbnailer"
-version = "1.0.0"
+version = "1.0.1"
 description = ""
 authors = ["Edward Q. Bridges <github@eqbridges.com>"]
 
@@ -22,7 +22,7 @@ allow-prereleases = true
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.0.0"
+version = "1.0.1"
 tag_format = "v$version"
 version_files = ["pyproject.toml:version","version.txt"]
 changelog_file = "CHANGELOG.md"
