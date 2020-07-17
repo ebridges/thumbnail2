@@ -1,5 +1,15 @@
 # Change Log
 
+## v1.1.0 (2020-07-17)
+
+### Fix
+
+- **release**: ensure all history is available for generating the changelog
+
+### Feat
+
+- Test automated release.
+
 ## v1.0.1 (2020-07-16)
 
 ### Fix
