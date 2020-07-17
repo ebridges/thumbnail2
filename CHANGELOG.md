@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.2.2 (2020-07-17)
+
+### Fix
+
+- **versioning**: add endpoint path to return lambda version
+
 ## v1.2.1 (2020-07-17)
 
 ### Fix
