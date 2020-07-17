@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.2.1 (2020-07-17)
+
+### Fix
+
+- **logging**: add verbose logging of event
+
 ## v1.2.0 (2020-07-17)
 
 ### Feat
