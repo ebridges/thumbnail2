@@ -1,5 +1,6 @@
 # Thumbnailer
 
+![latest release](https://img.shields.io/github/v/release/ebridges/thumbnailer?sort=semver&style=social)
 ![thumbnailer](https://github.com/ebridges/thumbnailer/workflows/thumbnailer-release/badge.svg)
 
 ## Configuration
