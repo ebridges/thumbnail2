@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.2.0 (2020-07-17)
+
+### Feat
+
+- **readme**: add documentation about usage & configuration.
+
 ## v1.1.0 (2020-07-17)
 
 ### Fix
