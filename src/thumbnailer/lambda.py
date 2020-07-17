@@ -67,6 +67,8 @@ def setup_verbose_logging(evt):
 def handler(event, context):
     setup_verbose_logging(event)
 
+    debug(event)
+
     url_path = event.get('path')
     if not url_path:
         return generate_json_respone(400, f'url path not set')
