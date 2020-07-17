@@ -24,7 +24,7 @@ allow-prereleases = true
 name = "cz_conventional_commits"
 version = "1.2.1"
 tag_format = "v$version"
-version_files = ["pyproject.toml:version","version.txt"]
+version_files = ["pyproject.toml:version","version.txt","src/thumbnailer/__init__.py:version"]
 changelog_file = "CHANGELOG.md"
 
 [build-system]
