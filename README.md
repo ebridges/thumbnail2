@@ -37,3 +37,7 @@ _See the [`lgw` configuration parameters](https://github.com/ebridges/lgw#config
 ## License
 
 _thumbnailer_ &copy; 2020 Edward Bridges &#9670; CC BY-NC-SA 4.0
+
+## Gratitude
+
+Thank you!
