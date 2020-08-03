@@ -100,6 +100,9 @@ def handler(event, context):
         scope.set_tag("image_url_path", url_path)
         scope.set_extra("thumbnail_event", event)
 
+        if environ.get('TRIGGER_ERROR'):
+            1 / 0
+
         if not url_path:
             return generate_json_respone(400, f'url path not set')
 
