@@ -1,5 +1,11 @@
 # Change Log
 
+## v1.4.0 (2020-08-03)
+
+### Feat
+
+- integrate monitoring in lambda, logging the current event & path.
+
 ## v1.3.0 (2020-07-28)
 
 ### Feat
