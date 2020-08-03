@@ -5,6 +5,7 @@ from tempfile import NamedTemporaryFile
 
 from botocore.errorfactory import ClientError
 
+from thumbnailer import version
 from thumbnailer.image import resize
 from thumbnailer.responses import (
     generate_binary_response,
@@ -14,10 +15,14 @@ from thumbnailer.responses import (
 )
 from thumbnailer.s3 import KeyNotFound, download_file_from_s3, upload_file_to_s3
 from thumbnailer.util import configure_logging, DEFAULT_WIDTH, DEFAULT_HEIGHT
+from sentry_sdk import init, configure_scope
+from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
 
 
 MEDIA_BUCKET_ENV_KEY = 'MEDIA_UPLOAD_BUCKET_NAME'
 THUMBS_BUCKET_ENV_KEY = 'MEDIA_THUMBS_BUCKET_NAME'
+MONITORING_DSN = 'SENTRY_DSN'
+OPERATING_ENV = 'OPERATING_ENV'
 
 
 def parse_path(path):
@@ -65,53 +70,78 @@ def setup_verbose_logging(evt):
     configure_logging(verboseLogging)
 
 
+def init_monitoring():
+    dsn = environ.get(MONITORING_DSN)
+    env = environ.get(OPERATING_ENV)
+    
+    if not dsn:
+        return
+    
+    init(
+        dsn=dsn,
+        integrations=[AwsLambdaIntegration()],
+        release=f'v{version}',
+        send_default_pii=False,
+        traces_sample_rate=0.50,
+        environment=env,
+        _experiments={'auto_enabling_integrations': True},
+    )
+
+
 def handler(event, context):
     setup_verbose_logging(event)
+
+    init_monitoring()
 
     debug(event)
 
     url_path = event.get('path')
-    if not url_path:
-        return generate_json_respone(400, f'url path not set')
+    with configure_scope() as scope:
+        scope.set_tag("image_url_path", url_path)
+        scope.set_extra("thumbnail_event", event)
 
-    if url_path.endswith('favicon.ico'):
-        return generate_favicon_response()
+        if environ.get('TRIGGER_ERROR'):
+            1 / 0
 
-    if url_path.endswith('version'):
-        return generate_version_response()
+        if not url_path:
+            return generate_json_respone(400, f'url path not set')
 
-    source_bucket = environ.get(MEDIA_BUCKET_ENV_KEY)
-    if not source_bucket:
-        return generate_json_respone(
-            400, f'source bucket not configured via "{MEDIA_BUCKET_ENV_KEY}"'
-        )
+        if url_path.endswith('favicon.ico'):
+            return generate_favicon_response()
 
-    thumbs_bucket = environ.get(THUMBS_BUCKET_ENV_KEY)
-    if not thumbs_bucket:
-        return generate_json_respone(
-            400, f'thumbs bucket not configured via "{THUMBS_BUCKET_ENV_KEY}"'
-        )
+        if url_path.endswith('version'):
+            return generate_version_response()
 
-    try:
-        width, height, key = parse_path(url_path)
-    except ValueError as e:
-        return generate_json_respone(400, str(e))
-
-    keyname, ext = splitext(key)
-    thumbnail_key = format_thumbnail_key(keyname, width, height, ext)
-
-    # info(f'retrieving s3://{source_bucket}:{key} ({ext}) to s3://{thumbs_bucket}:{thumbnail_key} at dims {width}x{height}')
-
-    with NamedTemporaryFile(suffix=ext) as temp:
-        try:
-            download_file_from_s3(thumbs_bucket, thumbnail_key, temp.name)
-        except KeyNotFound:
-            info(
-                f'{thumbs_bucket}/{thumbnail_key} not found. creating it from {source_bucket}/{key}'
+        source_bucket = environ.get(MEDIA_BUCKET_ENV_KEY)
+        if not source_bucket:
+            return generate_json_respone(
+                400, f'source bucket not configured via "{MEDIA_BUCKET_ENV_KEY}"'
             )
-            source_stream = download_file_from_s3(source_bucket, key, temp.name)
-            resize(temp.name, width, height)
-            upload_file_to_s3(thumbs_bucket, thumbnail_key, temp.name)
 
-        info(f'returning thumbnail from file {temp.name}')
-        return generate_binary_response(200, temp.name)
+        thumbs_bucket = environ.get(THUMBS_BUCKET_ENV_KEY)
+        if not thumbs_bucket:
+            return generate_json_respone(
+                400, f'thumbs bucket not configured via "{THUMBS_BUCKET_ENV_KEY}"'
+            )
+
+        try:
+            width, height, key = parse_path(url_path)
+        except ValueError as e:
+            return generate_json_respone(400, str(e))
+
+        keyname, ext = splitext(key)
+        thumbnail_key = format_thumbnail_key(keyname, width, height, ext)
+
+        info(f'retrieving s3://{source_bucket}:{key} ({ext}) to s3://{thumbs_bucket}:{thumbnail_key} at dims {width}x{height}')
+
+        with NamedTemporaryFile(suffix=ext) as temp:
+            try:
+                download_file_from_s3(thumbs_bucket, thumbnail_key, temp.name)
+            except KeyNotFound:
+                info(f'{thumbs_bucket}/{thumbnail_key} not found. creating from {source_bucket}/{key}')
+                source_stream = download_file_from_s3(source_bucket, key, temp.name)
+                resize(temp.name, width, height)
+                upload_file_to_s3(thumbs_bucket, thumbnail_key, temp.name)
+
+            info(f'returning thumbnail from file {temp.name}')
+            return generate_binary_response(200, temp.name)

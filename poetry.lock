@@ -77,7 +77,7 @@ python-dateutil = ">=2.1,<3.0.0"
 urllib3 = ">=1.20,<1.26"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python package for providing Mozilla's CA Bundle."
 name = "certifi"
 optional = false
@@ -531,6 +531,33 @@ version = "0.3.3"
 botocore = ">=1.12.36,<2.0a.0"
 
 [[package]]
+category = "main"
+description = "Python client for Sentry (https://sentry.io)"
+name = "sentry-sdk"
+optional = false
+python-versions = "*"
+version = "0.16.3"
+
+[package.dependencies]
+certifi = "*"
+urllib3 = ">=1.10.0"
+
+[package.extras]
+aiohttp = ["aiohttp (>=3.5)"]
+beam = ["apache-beam (>=2.12)"]
+bottle = ["bottle (>=0.12.13)"]
+celery = ["celery (>=3)"]
+django = ["django (>=1.8)"]
+falcon = ["falcon (>=1.4)"]
+flask = ["flask (>=0.11)", "blinker (>=1.1)"]
+pure_eval = ["pure-eval", "executing", "asttokens"]
+pyspark = ["pyspark (>=2.4.4)"]
+rq = ["rq (>=0.6)"]
+sanic = ["sanic (>=0.8)"]
+sqlalchemy = ["sqlalchemy (>=1.2)"]
+tornado = ["tornado (>=5)"]
+
+[[package]]
 category = "dev"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
@@ -579,7 +606,7 @@ python-versions = "*"
 version = "1.4.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 name = "urllib3"
 optional = false
@@ -646,7 +673,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "c62436a751a6c3517574fdd07c98f761b7dfd17a8f188305b8ad37612989b7ba"
+content-hash = "b31b2f36c2ae8bcb391c4912be1bbffa88a180c58d346b5b63e4183b1ddbdda5"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -924,6 +951,10 @@ requests = [
 s3transfer = [
     {file = "s3transfer-0.3.3-py2.py3-none-any.whl", hash = "sha256:2482b4259524933a022d59da830f51bd746db62f047d6eb213f2f8855dcb8a13"},
     {file = "s3transfer-0.3.3.tar.gz", hash = "sha256:921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db"},
+]
+sentry-sdk = [
+    {file = "sentry-sdk-0.16.3.tar.gz", hash = "sha256:21b17d6aa064c0fb703a7c00f77cf6c9c497cf2f83345c28892980a5e742d116"},
+    {file = "sentry_sdk-0.16.3-py2.py3-none-any.whl", hash = "sha256:4fc97114c77d005467b9b1a29f042e2bc01923cb683b0ef0bbda46e79fa12532"},
 ]
 six = [
     {file = "six-1.14.0-py2.py3-none-any.whl", hash = "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"},
