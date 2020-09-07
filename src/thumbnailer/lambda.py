@@ -1,11 +1,11 @@
-from logging import debug, info
+from logging import debug, info, warn
 from os import environ
 from os.path import splitext
 from tempfile import NamedTemporaryFile
 
 from botocore.errorfactory import ClientError
+from sentry_sdk import configure_scope
 
-from thumbnailer import version
 from thumbnailer.image import resize
 from thumbnailer.responses import (
     generate_binary_response,
@@ -14,15 +14,11 @@ from thumbnailer.responses import (
     generate_version_response,
 )
 from thumbnailer.s3 import KeyNotFound, download_file_from_s3, upload_file_to_s3
-from thumbnailer.util import configure_logging, DEFAULT_WIDTH, DEFAULT_HEIGHT
-from sentry_sdk import init, configure_scope
-from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
+from thumbnailer.util import init_monitoring, configure_logging, DEFAULT_WIDTH, DEFAULT_HEIGHT
 
 
 MEDIA_BUCKET_ENV_KEY = 'MEDIA_UPLOAD_BUCKET_NAME'
 THUMBS_BUCKET_ENV_KEY = 'MEDIA_THUMBS_BUCKET_NAME'
-MONITORING_DSN = 'SENTRY_DSN'
-OPERATING_ENV = 'OPERATING_ENV'
 
 
 def parse_path(path):
@@ -69,23 +65,6 @@ def setup_verbose_logging(evt):
         verboseLogging = True
     configure_logging(verboseLogging)
 
-
-def init_monitoring():
-    dsn = environ.get(MONITORING_DSN)
-    env = environ.get(OPERATING_ENV)
-    
-    if not dsn:
-        return
-    
-    init(
-        dsn=dsn,
-        integrations=[AwsLambdaIntegration()],
-        release=f'v{version}',
-        send_default_pii=False,
-        traces_sample_rate=0.50,
-        environment=env,
-        _experiments={'auto_enabling_integrations': True},
-    )
 
 init_monitoring()
 
