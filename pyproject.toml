@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "thumbnailer"
-version = "1.4.0"
+version = "1.5.0"
 description = "A lambda function to generate thumbnails to an S3 bucket."
 authors = ["Edward Q. Bridges <github@eqbridges.com>"]
 
@@ -23,7 +23,7 @@ allow-prereleases = true
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.4.0"
+version = "1.5.0"
 tag_format = "v$version"
 version_files = ["pyproject.toml:version","version.txt","src/thumbnailer/__init__.py:version"]
 changelog_file = "CHANGELOG.md"

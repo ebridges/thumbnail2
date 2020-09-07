@@ -1,5 +1,15 @@
 # Change Log
 
+## v1.5.0 (2020-09-07)
+
+### Refactor
+
+- move function for initializing monitoring off to the side.
+
+### Fix
+
+- monitoring must be initialized before the handler is invoked.
+
 ## v1.4.0 (2020-08-03)
 
 ### Feat
