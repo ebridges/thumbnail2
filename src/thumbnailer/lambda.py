@@ -87,11 +87,10 @@ def init_monitoring():
         _experiments={'auto_enabling_integrations': True},
     )
 
+init_monitoring()
 
 def handler(event, context):
     setup_verbose_logging(event)
-
-    init_monitoring()
 
     debug(event)
 
